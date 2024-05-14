@@ -4,10 +4,10 @@
  */
 package Component;
 
-import com.mysql.jdbc.Connection;
-import com.mysql.jdbc.PreparedStatement;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import com.mysql.jdbc.Statement;
+import java.sql.Statement;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Date;
@@ -36,13 +36,13 @@ public class sqliteDriver {
         }
     }
     
-    public void createClient(String nom, String prenom, String adresse, String telephone){
+    public void createClient(String nom, String prenom, String adresse, String telephone, long date){
         try{
             
             pst = (PreparedStatement) connect().prepareStatement("insert client(nom,prenom,adresse,telephone,crediteur,reste,totalAchat) values (?,?,?,?,?,?,?)");
             pst.setString(1, nom);
             pst.setString(2, prenom);
-            pst.setString(3, prenom + new Date().getTime());
+            pst.setString(3, prenom + date);
             pst.setString(4, adresse);
             pst.setString(5,telephone);
             pst.setInt(6, 0);
@@ -54,7 +54,7 @@ public class sqliteDriver {
         }
     }
     
-    public void createCommande(){
+    public void createCommande(int total, int nombre_article, String id_unique,String id_client){
         
     }
     
@@ -64,7 +64,9 @@ public class sqliteDriver {
             String id_uniqueCli;
             rs = st.executeQuery("select * from client where nom = '" + client.getNom() + "'");
             if(rs.wasNull()){
-                createClient(client.getNom(),client.getPrenom(), client.getAdresse(),client.getNumeroTel());
+                long date = new Date().getTime();
+                createClient(client.getNom(),client.getPrenom(), client.getAdresse(),client.getNumeroTel(), date);
+                id_uniqueCli = client.getPrenom() + date;
                 
             }else{
             }

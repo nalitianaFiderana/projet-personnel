@@ -4,7 +4,9 @@
  */
 package page;
 
+import control.newBD;
 import java.awt.Color;
+import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.border.EmptyBorder;
 import model.model_card;
@@ -20,9 +22,11 @@ public class dashboard extends javax.swing.JPanel {
      */
     public dashboard() {
         initComponents();
-        card1.setdata(new model_card(new ImageIcon(getClass().getResource("/ressource/img/icon/g21.png")), "Capital total","Ar 5780000","Augmentation de 10%" ));
-        card2.setdata(new model_card(new ImageIcon(getClass().getResource("/ressource/img/icon/g21.png")), "Stock total","Ar 880000","Augmentation de 20%" ));
-        card3.setdata(new model_card(new ImageIcon(getClass().getResource("/ressource/img/icon/g21.png")), "Benefice total","Ar 78000","Augmentation de 30%" ));
+        newBD bd = new newBD();
+        List<String[]> ls = bd.readData("base");
+        card1.setdata(new model_card(new ImageIcon(getClass().getResource("/ressource/img/icon/g21.png")), ls.get(4)[0]+" total","Ar "+ls.get(4)[1],"Augmentation de "+ls.get(4)[2]+"%" ));
+        card2.setdata(new model_card(new ImageIcon(getClass().getResource("/ressource/img/icon/g21.png")), ls.get(5)[0]+" total","Ar "+ls.get(5)[1],"Augmentation de "+ls.get(5)[2]+"%" ));
+        card3.setdata(new model_card(new ImageIcon(getClass().getResource("/ressource/img/icon/g21.png")), ls.get(6)[0]+" total","Ar "+ls.get(6)[1],"Augmentation de "+ls.get(6)[2]+"%" ));
         setBackground(new Color(198, 208, 251));
         jScrollPane1.setBorder(new EmptyBorder(0,0,0,0));
     }

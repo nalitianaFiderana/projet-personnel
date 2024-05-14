@@ -20,6 +20,8 @@ public class recherche extends javax.swing.JPanel {
         initComponents();
     }
     
+    public javax.swing.JComboBox<String> getTriage(){ return this.triage;}
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -32,7 +34,7 @@ public class recherche extends javax.swing.JPanel {
 
         panelBorder1 = new swing.PanelBorder();
         jLabel1 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        triage = new javax.swing.JComboBox<>();
 
         panelBorder1.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -41,13 +43,13 @@ public class recherche extends javax.swing.JPanel {
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Lister");
 
-        jComboBox1.setBackground(new java.awt.Color(236, 236, 236));
-        jComboBox1.setFont(new java.awt.Font("Segoe UI", 2, 12)); // NOI18N
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "par nom", "par date", "par montant" }));
-        jComboBox1.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, null, new java.awt.Color(153, 153, 153), new java.awt.Color(204, 204, 204), new java.awt.Color(102, 102, 102)));
-        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+        triage.setBackground(new java.awt.Color(236, 236, 236));
+        triage.setFont(new java.awt.Font("Segoe UI", 2, 12)); // NOI18N
+        triage.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "par nom", "par date", "par montant" }));
+        triage.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, null, new java.awt.Color(153, 153, 153), new java.awt.Color(204, 204, 204), new java.awt.Color(102, 102, 102)));
+        triage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox1ActionPerformed(evt);
+                triageActionPerformed(evt);
             }
         });
 
@@ -59,7 +61,7 @@ public class recherche extends javax.swing.JPanel {
                 .addGap(14, 14, 14)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(triage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(670, Short.MAX_VALUE))
         );
         panelBorder1Layout.setVerticalGroup(
@@ -68,7 +70,7 @@ public class recherche extends javax.swing.JPanel {
                 .addGroup(panelBorder1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addGroup(panelBorder1Layout.createSequentialGroup()
                         .addGap(2, 2, 2)
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                        .addComponent(triage, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                         .addGap(2, 2, 2))
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(0, 0, Short.MAX_VALUE))
@@ -92,14 +94,14 @@ public class recherche extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+    private void triageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_triageActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox1ActionPerformed
+    }//GEN-LAST:event_triageActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private swing.PanelBorder panelBorder1;
+    private javax.swing.JComboBox<String> triage;
     // End of variables declaration//GEN-END:variables
 }

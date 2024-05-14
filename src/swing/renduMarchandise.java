@@ -5,6 +5,7 @@
 package swing;
 
 import model.marchandise;
+import java.awt.Color;
 
 /**
  *
@@ -17,6 +18,11 @@ public class renduMarchandise extends javax.swing.JPanel {
      */
     public renduMarchandise(marchandise data) {
         initComponents();
+        nom.setText(" => "+data.getNom());
+        prix.setText(data.getPrixVente() + " Ar");
+        stock.setText("En Stock : " + data.getNombre());
+        System.out.println(Math.random());
+        
     }
     public renduMarchandise(){
         initComponents();

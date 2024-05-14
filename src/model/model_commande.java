@@ -128,4 +128,10 @@ public class model_commande {
         this.id_unique = id_unique;
         this.id_client = id_client;
     }
+    public model_commande(int total, int nombre_article, String id_unique,String id_client){
+        this.total = total;
+        this.nombre_article = nombre_article;
+        this.id_unique = id_unique;
+        this.id_client = id_client;
+    }
 }

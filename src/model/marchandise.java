@@ -8,7 +8,7 @@ package model;
  *
  * @author home
  */
-public class marchandise extends model_marchandise{
+public class marchandise{
 
     /**
      * @return the Unite
@@ -94,13 +94,24 @@ public class marchandise extends model_marchandise{
     public void setPrixVente(int prixVente) {
         this.prixVente = prixVente;
     }
+    
+    public String getDate(){
+        return date;
+    }
+    
+    public String getFournisseurName() {
+        return fournisseurName;
+    }
+    
     private String nom;
     private int nombre;
     private String type;
     private int prixAchat;
     private int prixVente;
     private String Unite;
-    private String id_unique;
+    private String fournisseurName;
+    private String date;
+    
     
     public marchandise(String nom,int nombre,String type,int prixAchat,int prixVente, String Unite){
         this.nom = nom;
@@ -110,13 +121,32 @@ public class marchandise extends model_marchandise{
         this.prixVente = prixVente;
         this.Unite = Unite;
     }
-    public marchandise(String nom,int nombre,String type,int prixVente, String Unite, String id_unique){
+    public marchandise(String nom,int nombre,String type,int prixVente, String Unite){
         this.nom = nom;
         this.nombre = nombre;
         this.type = type;
         this.prixVente = prixVente;
         this.Unite = Unite;
-        this.id_unique = id_unique;
+    }
+    public marchandise(String nom,int nombre,String type,int prixAchat,int prixVente, String Unite, String fournisseurName){
+        this.fournisseurName = fournisseurName;
+        this.nom = nom;
+        this.nombre = nombre;
+        this.type = type;
+        this.prixAchat = prixAchat;
+        this.prixVente = prixVente;
+        this.Unite = Unite;
+    }
+    
+    public marchandise(String date,String nom,int nombre,String type,int prixAchat,int prixVente, String Unite, String fournisseurName){
+        this.date = date;
+        this.fournisseurName = fournisseurName;
+        this.nom = nom;
+        this.nombre = nombre;
+        this.type = type;
+        this.prixAchat = prixAchat;
+        this.prixVente = prixVente;
+        this.Unite = Unite;
     }
     
     public marchandise(){}

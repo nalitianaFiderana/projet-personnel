@@ -41,7 +41,10 @@ public class date extends javax.swing.JPanel {
     }
     
     public String getDate(){
-        return d.getText();
+        return "jj/mm/aaaa".equals(d.getText()) ? "" : d.getText();
+    }
+    public void setDate(String s){
+        d.setText(s);
     }
 
     /**

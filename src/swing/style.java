@@ -16,46 +16,14 @@ import java.awt.RenderingHints;
  */
 public class style extends javax.swing.JPanel {
 
-    /**
-     * @return the color1
-     */
-    public Color getColor1() {
-        return color1;
-    }
-
-    /**
-     * @param color1 the color1 to set
-     */
-    public void setColor1(Color color1) {
-        this.color1 = color1;
-    }
-
-    /**
-     * @return the color2
-     */
-    public Color getColor2() {
-        return color2;
-    }
-
-    /**
-     * @param color2 the color2 to set
-     */
-    public void setColor2(Color color2) {
-        this.color2 = color2;
-    }
 
     /**
      * Creates new form style
      */
     
-    private Color color1;
-    private Color color2;
-    
     public style() {
         initComponents();
         setOpaque(false);
-        color1 = Color.BLACK;
-        color2 = Color.WHITE;
     }
 
     /**
@@ -83,7 +51,7 @@ public class style extends javax.swing.JPanel {
     public void paintComponent(Graphics grph){
         Graphics2D g2 = (Graphics2D) grph;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
-        GradientPaint g = new GradientPaint(0,0, getColor2(),0,getHeight(), getColor1());
+        GradientPaint g = new GradientPaint(0,0, Color.DARK_GRAY,0,getHeight(), Color.GREEN);
         g2.setPaint(g);
         g2.fillRoundRect(0,0, getWidth(),getHeight(),15,15);
         g2.setColor(new Color(255,255,255,50));

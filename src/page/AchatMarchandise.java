@@ -4,6 +4,15 @@
  */
 package page;
 
+import Component.csvWriter;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import javax.swing.JOptionPane;
+import model.marchandise;
+import model.model_cli;
+
 /**
  *
  * @author home
@@ -15,7 +24,77 @@ public class AchatMarchandise extends javax.swing.JPanel {
      */
     public AchatMarchandise() {
         initComponents();
+        achatMarch.addFocusListener( new FocusListener(){
+            @Override
+            public void focusGained(FocusEvent fe) {
+                updateLabel();
+            }
+
+            @Override
+            public void focusLost(FocusEvent fe) {
+            
+            }
+            
+        });
+        venteMarch.addFocusListener( new FocusListener(){
+            @Override
+            public void focusGained(FocusEvent fe) {
+                updateLabel();
+            }
+
+            @Override
+            public void focusLost(FocusEvent fe) {
+            
+            }
+            
+        });
+        nbrAchat.addFocusListener( new FocusListener(){
+            @Override
+            public void focusGained(FocusEvent fe) {
+                updateLabel();
+            }
+
+            @Override
+            public void focusLost(FocusEvent fe) {
+            
+            }
+            
+        });
+        avance.addFocusListener( new FocusListener(){
+            @Override
+            public void focusGained(FocusEvent fe) {    
+                indReste.setText("Reste à payer : " + (Integer.parseInt(achatMarch.getText().isEmpty() ? "0" : achatMarch.getText())*Integer.parseInt(nbrAchat.getText().isEmpty() ? "0" : nbrAchat.getText()) - Integer.parseInt(avance.getText().isEmpty() ? "0" : avance.getText())) + " ar");
+            }
+
+            @Override
+            public void focusLost(FocusEvent fe) {
+                indReste.setText("Reste à payer : " + (Integer.parseInt(achatMarch.getText().isEmpty() ? "0" : achatMarch.getText())*Integer.parseInt(nbrAchat.getText().isEmpty() ? "0" : nbrAchat.getText()) - Integer.parseInt(avance.getText().isEmpty() ? "0" : avance.getText())) + " ar");
+            }
+            
+        });
     }
+    
+    private void emptyField(){
+        achatMarch.setText("");
+        adresseFourni.setText(""); 
+        nbrAchat.setText("");
+        nomFourni.setText("");
+        nomMarch.setText("");
+        prenomFourni.setText("");
+        telFourni.setText("");
+        venteMarch.setText("");
+        date1.setDate("");
+        avance.setText("");
+    }
+    
+    private void updateLabel(){
+        int ach = Integer.parseInt(achatMarch.getText().isEmpty() ? "0" : achatMarch.getText());
+        int vent = Integer.parseInt(venteMarch.getText().isEmpty() ? "0" : venteMarch.getText());
+        int nbr = Integer.parseInt(nbrAchat.getText().isEmpty() ? "0" : nbrAchat.getText());
+        totalPaye.setText("La somme total : "+ach * nbr + " ar");
+        benefice.setText("Vos bénefice s'éleveront à " + (ach == 0 ? ach : (vent - ach)*100/ach) + "%");
+    }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -29,32 +108,34 @@ public class AchatMarchandise extends javax.swing.JPanel {
         jPanel1 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
-        jTextField4 = new javax.swing.JTextField();
+        nomFourni = new javax.swing.JTextField();
+        prenomFourni = new javax.swing.JTextField();
+        adresseFourni = new javax.swing.JTextField();
+        telFourni = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        jTextField5 = new javax.swing.JTextField();
-        jTextField6 = new javax.swing.JTextField();
-        jTextField7 = new javax.swing.JTextField();
-        jTextField8 = new javax.swing.JTextField();
-        Unite = new javax.swing.JComboBox<>();
+        nomMarch = new javax.swing.JTextField();
+        achatMarch = new javax.swing.JTextField();
+        venteMarch = new javax.swing.JTextField();
+        nbrAchat = new javax.swing.JTextField();
+        uniteMarch = new javax.swing.JComboBox<>();
         jLabel3 = new javax.swing.JLabel();
         TypePop = new javax.swing.JLabel();
-        TypeCombo = new javax.swing.JComboBox<>();
+        typeMarch = new javax.swing.JComboBox<>();
         panelBorder1 = new swing.PanelBorder();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
+        totalPaye = new javax.swing.JLabel();
+        benefice = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
+        indReste = new javax.swing.JLabel();
         panelBorder2 = new swing.PanelBorder();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        modePayment = new javax.swing.JComboBox<>();
         date1 = new model.date();
-        jLabel9 = new javax.swing.JLabel();
+        textEcheance = new javax.swing.JLabel();
+        avance = new javax.swing.JTextField();
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -76,21 +157,22 @@ public class AchatMarchandise extends javax.swing.JPanel {
             .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE)
         );
 
-        jTextField1.setBackground(new java.awt.Color(255, 255, 255));
-        jTextField1.setForeground(new java.awt.Color(102, 102, 102));
-        jTextField1.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(153, 153, 153), 1, true), "Nom", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(153, 153, 153))); // NOI18N
+        nomFourni.setForeground(new java.awt.Color(102, 102, 102));
+        nomFourni.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(153, 153, 153), 1, true), "Nom", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Dialog", 0, 11), new java.awt.Color(153, 153, 153))); // NOI18N
+        nomFourni.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                nomFourniActionPerformed(evt);
+            }
+        });
 
-        jTextField2.setBackground(new java.awt.Color(255, 255, 255));
-        jTextField2.setForeground(new java.awt.Color(102, 102, 102));
-        jTextField2.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(153, 153, 153), 1, true), "Prenom", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(153, 153, 153))); // NOI18N
+        prenomFourni.setForeground(new java.awt.Color(102, 102, 102));
+        prenomFourni.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(153, 153, 153), 1, true), "Prenom", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Dialog", 0, 11), new java.awt.Color(153, 153, 153))); // NOI18N
 
-        jTextField3.setBackground(new java.awt.Color(255, 255, 255));
-        jTextField3.setForeground(new java.awt.Color(102, 102, 102));
-        jTextField3.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(153, 153, 153), 1, true), "Adresse", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(153, 153, 153))); // NOI18N
+        adresseFourni.setForeground(new java.awt.Color(102, 102, 102));
+        adresseFourni.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(153, 153, 153), 1, true), "Adresse", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Dialog", 0, 11), new java.awt.Color(153, 153, 153))); // NOI18N
 
-        jTextField4.setBackground(new java.awt.Color(255, 255, 255));
-        jTextField4.setForeground(new java.awt.Color(102, 102, 102));
-        jTextField4.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(153, 153, 153), 1, true), "Telephone", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(153, 153, 153))); // NOI18N
+        telFourni.setForeground(new java.awt.Color(102, 102, 102));
+        telFourni.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(153, 153, 153), 1, true), "Telephone", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Dialog", 0, 11), new java.awt.Color(153, 153, 153))); // NOI18N
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -100,10 +182,10 @@ public class AchatMarchandise extends javax.swing.JPanel {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(22, 22, 22)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(telFourni, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(prenomFourni, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(nomFourni, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(adresseFourni, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(329, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -111,14 +193,14 @@ public class AchatMarchandise extends javax.swing.JPanel {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(nomFourni, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(prenomFourni, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(adresseFourni, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(15, Short.MAX_VALUE))
+                .addComponent(telFourni, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(33, Short.MAX_VALUE))
         );
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
@@ -141,26 +223,36 @@ public class AchatMarchandise extends javax.swing.JPanel {
             .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 33, Short.MAX_VALUE)
         );
 
-        jTextField5.setBackground(new java.awt.Color(255, 255, 255));
-        jTextField5.setForeground(new java.awt.Color(102, 102, 102));
-        jTextField5.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(153, 153, 153), 1, true), "Nom", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.BOTTOM, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(153, 153, 153))); // NOI18N
+        nomMarch.setForeground(new java.awt.Color(102, 102, 102));
+        nomMarch.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(153, 153, 153), 1, true), "Nom", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.BOTTOM, new java.awt.Font("Dialog", 0, 11), new java.awt.Color(153, 153, 153))); // NOI18N
 
-        jTextField6.setBackground(new java.awt.Color(255, 255, 255));
-        jTextField6.setForeground(new java.awt.Color(102, 102, 102));
-        jTextField6.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(153, 153, 153), 1, true), "Prix d'achat", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.BOTTOM, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(153, 153, 153))); // NOI18N
+        achatMarch.setForeground(new java.awt.Color(102, 102, 102));
+        achatMarch.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(153, 153, 153), 1, true), "Prix d'achat", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.BOTTOM, new java.awt.Font("Dialog", 0, 11), new java.awt.Color(153, 153, 153))); // NOI18N
+        achatMarch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                achatMarchActionPerformed(evt);
+            }
+        });
 
-        jTextField7.setBackground(new java.awt.Color(255, 255, 255));
-        jTextField7.setForeground(new java.awt.Color(102, 102, 102));
-        jTextField7.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(153, 153, 153), 1, true), "Prix de vente", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.BOTTOM, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(153, 153, 153))); // NOI18N
+        venteMarch.setForeground(new java.awt.Color(102, 102, 102));
+        venteMarch.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(153, 153, 153), 1, true), "Prix de vente", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.BOTTOM, new java.awt.Font("Dialog", 0, 11), new java.awt.Color(153, 153, 153))); // NOI18N
+        venteMarch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                venteMarchActionPerformed(evt);
+            }
+        });
 
-        jTextField8.setBackground(new java.awt.Color(255, 255, 255));
-        jTextField8.setForeground(new java.awt.Color(102, 102, 102));
-        jTextField8.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(153, 153, 153), 1, true), "Nombre", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.BOTTOM, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(153, 153, 153))); // NOI18N
+        nbrAchat.setForeground(new java.awt.Color(102, 102, 102));
+        nbrAchat.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(153, 153, 153), 1, true), "Nombre", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.BOTTOM, new java.awt.Font("Dialog", 0, 11), new java.awt.Color(153, 153, 153))); // NOI18N
+        nbrAchat.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                nbrAchatActionPerformed(evt);
+            }
+        });
 
-        Unite.setBackground(new java.awt.Color(255, 255, 255));
-        Unite.setForeground(new java.awt.Color(102, 102, 102));
-        Unite.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "kg", "sac" }));
-        Unite.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        uniteMarch.setForeground(new java.awt.Color(102, 102, 102));
+        uniteMarch.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "kg", "sac" }));
+        uniteMarch.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
         jLabel3.setForeground(new java.awt.Color(102, 102, 102));
         jLabel3.setText(" Unite : ");
@@ -172,10 +264,8 @@ public class AchatMarchandise extends javax.swing.JPanel {
         TypePop.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         TypePop.setOpaque(true);
 
-        TypeCombo.setBackground(new java.awt.Color(255, 255, 255));
-        TypeCombo.setForeground(new java.awt.Color(102, 102, 102));
-        TypeCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "gros", "mini" }));
-        TypeCombo.setBorder(null);
+        typeMarch.setForeground(new java.awt.Color(102, 102, 102));
+        typeMarch.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "gros", "mini" }));
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -188,51 +278,51 @@ public class AchatMarchandise extends javax.swing.JPanel {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(Unite, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(uniteMarch, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(nomMarch, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(achatMarch, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(venteMarch, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(nbrAchat, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(TypePop)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(6, 6, 6)
-                        .addComponent(TypeCombo, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(typeMarch, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(247, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(nomMarch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(achatMarch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(TypePop, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(TypeCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(venteMarch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(typeMarch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(nbrAchat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(Unite, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 19, Short.MAX_VALUE))
+                    .addComponent(uniteMarch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 40, Short.MAX_VALUE))
         );
 
         panelBorder1.setBackground(new java.awt.Color(255, 255, 255));
 
-        jLabel4.setFont(new java.awt.Font("Segoe UI", 3, 14)); // NOI18N
-        jLabel4.setForeground(new java.awt.Color(51, 51, 51));
-        jLabel4.setText("La somme total de cette achat est de  : 1000000000 ar");
+        totalPaye.setFont(new java.awt.Font("Segoe UI", 3, 14)); // NOI18N
+        totalPaye.setForeground(new java.awt.Color(51, 51, 51));
+        totalPaye.setText("La somme total : 0 ar");
 
-        jLabel5.setFont(new java.awt.Font("Sitka Banner", 2, 16)); // NOI18N
-        jLabel5.setForeground(new java.awt.Color(0, 153, 0));
-        jLabel5.setText("Vos benefices s'eleveront a  :  2% ");
+        benefice.setFont(new java.awt.Font("Sitka Banner", 2, 16)); // NOI18N
+        benefice.setForeground(new java.awt.Color(0, 153, 0));
+        benefice.setText("Vos bénefices s'éleveront a  :  0% ");
 
         jButton1.setBackground(new java.awt.Color(204, 0, 102));
         jButton1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -245,29 +335,37 @@ public class AchatMarchandise extends javax.swing.JPanel {
             }
         });
 
+        indReste.setBackground(new java.awt.Color(153, 0, 0));
+        indReste.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
+        indReste.setForeground(new java.awt.Color(255, 51, 51));
+        indReste.setText("Reste à payer : ");
+
         javax.swing.GroupLayout panelBorder1Layout = new javax.swing.GroupLayout(panelBorder1);
         panelBorder1.setLayout(panelBorder1Layout);
         panelBorder1Layout.setHorizontalGroup(
             panelBorder1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelBorder1Layout.createSequentialGroup()
-                .addGap(18, 18, 18)
-                .addGroup(panelBorder1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel5)
-                    .addComponent(jLabel4))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelBorder1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
+            .addGroup(panelBorder1Layout.createSequentialGroup()
+                .addGap(18, 18, 18)
+                .addGroup(panelBorder1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(benefice)
+                    .addComponent(totalPaye)
+                    .addComponent(indReste, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 114, Short.MAX_VALUE))
         );
         panelBorder1Layout.setVerticalGroup(
             panelBorder1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelBorder1Layout.createSequentialGroup()
                 .addGap(14, 14, 14)
-                .addComponent(jLabel4)
+                .addComponent(totalPaye)
                 .addGap(18, 18, 18)
-                .addComponent(jLabel5)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 49, Short.MAX_VALUE)
+                .addComponent(benefice)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(indReste)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(14, 14, 14))
         );
@@ -288,15 +386,22 @@ public class AchatMarchandise extends javax.swing.JPanel {
         jLabel8.setForeground(new java.awt.Color(255, 255, 255));
         jLabel8.setText("Mode de Payment : ");
 
-        jComboBox1.setBackground(new java.awt.Color(255, 255, 255));
-        jComboBox1.setForeground(new java.awt.Color(102, 102, 102));
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "a credit", "en espece" }));
+        modePayment.setForeground(new java.awt.Color(102, 102, 102));
+        modePayment.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "a credit", "en espece" }));
+        modePayment.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                modePaymentActionPerformed(evt);
+            }
+        });
 
         date1.setBackground(new java.awt.Color(51, 102, 255));
 
-        jLabel9.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jLabel9.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel9.setText("Echeance : ");
+        textEcheance.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        textEcheance.setForeground(new java.awt.Color(255, 255, 255));
+        textEcheance.setText("Echeance : ");
+
+        avance.setBackground(new java.awt.Color(51, 153, 255));
+        avance.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)), "Avance", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Dialog", 0, 10), new java.awt.Color(255, 255, 255))); // NOI18N
 
         javax.swing.GroupLayout panelBorder2Layout = new javax.swing.GroupLayout(panelBorder2);
         panelBorder2.setLayout(panelBorder2Layout);
@@ -314,12 +419,15 @@ public class AchatMarchandise extends javax.swing.JPanel {
                         .addGap(14, 14, 14)
                         .addGroup(panelBorder2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel8)
-                            .addComponent(jLabel9))
+                            .addComponent(textEcheance))
                         .addGap(18, 18, 18)
                         .addGroup(panelBorder2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(date1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(34, Short.MAX_VALUE))
+                            .addGroup(panelBorder2Layout.createSequentialGroup()
+                                .addComponent(modePayment, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(avance, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addContainerGap(25, Short.MAX_VALUE))
         );
         panelBorder2Layout.setVerticalGroup(
             panelBorder2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -331,15 +439,16 @@ public class AchatMarchandise extends javax.swing.JPanel {
                 .addGap(18, 18, 18)
                 .addGroup(panelBorder2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(modePayment, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(avance, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(panelBorder2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelBorder2Layout.createSequentialGroup()
                         .addGap(18, 18, 18)
                         .addComponent(date1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(panelBorder2Layout.createSequentialGroup()
                         .addGap(26, 26, 26)
-                        .addComponent(jLabel9)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(textEcheance)))
+                .addContainerGap(13, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -348,26 +457,27 @@ public class AchatMarchandise extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(24, 24, 24)
-                        .addComponent(panelBorder2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(panelBorder2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(9, 9, 9)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(6, 6, 6)
                         .addComponent(panelBorder1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(14, 14, 14))))
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(15, 15, 15)
-                .addComponent(panelBorder1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGap(21, 21, 21)
+                .addComponent(panelBorder1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(panelBorder2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
@@ -375,39 +485,100 @@ public class AchatMarchandise extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+        if(!achatMarch.getText().isEmpty() && !adresseFourni.getText().isEmpty() 
+           && !nbrAchat.getText().isEmpty() && !nomFourni.getText().isEmpty()
+            && !nomMarch.getText().isEmpty() && !prenomFourni.getText().isEmpty()
+            && !telFourni.getText().isEmpty() && !venteMarch.getText().isEmpty() && (date1.isVisible() ? !date1.getDate().isEmpty() : true)){
+            csvWriter csv = new csvWriter();
+            
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy  HH:mm");
+            Date maintenant = new Date();
+            String dateHeure = sdf.format(maintenant);
+            
+            int totalAchat = Integer.parseInt(nbrAchat.getText()) * Integer.parseInt(achatMarch.getText());
+            model_cli fourni = new model_cli(nomFourni.getText(),prenomFourni.getText()
+                    ,adresseFourni.getText(),telFourni.getText()
+                    ,modePayment.getSelectedIndex() == 0 ? true : false
+                    ,avance.isVisible() ? (!avance.getText().isEmpty() ? totalAchat - Integer.parseInt(avance.getText()) : totalAchat) : 0
+                    ,totalAchat);
+            marchandise ma = new marchandise(date1.getDate(),nomMarch.getText()
+                    ,Integer.parseInt(nbrAchat.getText()),typeMarch.getSelectedItem().toString()
+                    ,Integer.parseInt(achatMarch.getText()),Integer.parseInt(venteMarch.getText())
+                    ,uniteMarch.getSelectedItem().toString(),nomFourni.getText());
+            csv.addMarchandise(ma,dateHeure);
+            csv.addPersonne(fourni, false);
+            this.emptyField();
+        }else{
+        JOptionPane.showMessageDialog(this, "Veuillez remplir tous les champs avec les bons données", "Information", JOptionPane.INFORMATION_MESSAGE);
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void nomFourniActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nomFourniActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_nomFourniActionPerformed
+
+    private void modePaymentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modePaymentActionPerformed
+        // TODO add your handling code here:
+        System.out.println(modePayment.getSelectedIndex());
+        if(modePayment.getSelectedIndex() == 0){
+            date1.setVisible(true);
+            textEcheance.setVisible(true);
+            avance.setVisible(true);
+            indReste.setVisible(true);
+        }else{
+            date1.setVisible(false);
+            textEcheance.setVisible(false);
+            avance.setVisible(false);
+            indReste.setVisible(false);
+        }
+    }//GEN-LAST:event_modePaymentActionPerformed
+
+    private void achatMarchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_achatMarchActionPerformed
+        // TODO add your handling code here:
+        updateLabel();
+    }//GEN-LAST:event_achatMarchActionPerformed
+
+    private void nbrAchatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nbrAchatActionPerformed
+        // TODO add your handling code here:
+        updateLabel();
+    }//GEN-LAST:event_nbrAchatActionPerformed
+
+    private void venteMarchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_venteMarchActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_venteMarchActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> TypeCombo;
     private javax.swing.JLabel TypePop;
-    private javax.swing.JComboBox<String> Unite;
+    private javax.swing.JTextField achatMarch;
+    private javax.swing.JTextField adresseFourni;
+    private javax.swing.JTextField avance;
+    private javax.swing.JLabel benefice;
     private model.date date1;
+    private javax.swing.JLabel indReste;
     private javax.swing.JButton jButton1;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
-    private javax.swing.JTextField jTextField6;
-    private javax.swing.JTextField jTextField7;
-    private javax.swing.JTextField jTextField8;
+    private javax.swing.JComboBox<String> modePayment;
+    private javax.swing.JTextField nbrAchat;
+    private javax.swing.JTextField nomFourni;
+    private javax.swing.JTextField nomMarch;
     private swing.PanelBorder panelBorder1;
     private swing.PanelBorder panelBorder2;
+    private javax.swing.JTextField prenomFourni;
+    private javax.swing.JTextField telFourni;
+    private javax.swing.JLabel textEcheance;
+    private javax.swing.JLabel totalPaye;
+    private javax.swing.JComboBox<String> typeMarch;
+    private javax.swing.JComboBox<String> uniteMarch;
+    private javax.swing.JTextField venteMarch;
     // End of variables declaration//GEN-END:variables
 }

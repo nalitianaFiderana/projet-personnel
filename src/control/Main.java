@@ -38,17 +38,17 @@ public class Main extends javax.swing.JFrame {
     private GInventaire Ginv;
     public static Main instance;
     
-    private int lastRender = 0;
     
     public Main() {
         initComponents();
+        newBD bd = new newBD();
+        if(bd.readData("base").isEmpty()){ bd.create();}
         if(instance == null){
             instance = this;
         }
         //initialisation
         dash = new dashboard();
         search = new recherche();
-        pointV = new pointDeVente();
         Gcli = new GClient();
         AchMar = new AchatMarchandise();
         Gart = new GArticle();
@@ -65,27 +65,22 @@ public class Main extends javax.swing.JFrame {
             public void selected(int index){
                 switch(index){
                     case 1:
-                        lastRender = 1;
+                        pointV = new pointDeVente();
                         setForm(pointV);
                         break;
                     case 2:
-                        lastRender = 2;
                         setForm(Gcli);
                         break;
                     case 5:
-                        lastRender = 5;
                         setForm(AchMar);
                         break;
                     case 8:
-                        lastRender = 8;
                         setForm(Gart);
                         break;
                     case 9:
-                        lastRender = 9;
                         setForm(Ginv);
                         break;
                     case 10:
-                        lastRender = 10;
                         setForm(Gfou);
                         break;
                     default:
@@ -102,7 +97,6 @@ public class Main extends javax.swing.JFrame {
 
             @Override
             public void focusLost(FocusEvent e) {
-                rendered(lastRender);
             }
             
         });
@@ -119,20 +113,6 @@ public class Main extends javax.swing.JFrame {
         main_panel.revalidate();
         System.out.print(comp);
         System.out.println();
-    }
-    
-    public void rendered(int index){
-        switch(index){
-            case 1 -> setForm(pointV);
-            case 2 -> setForm(Gcli);
-            case 5 -> setForm(AchMar);
-            case 8 -> setForm(Gart);
-            case 9 -> setForm(Ginv);
-            case 10 -> setForm(Gfou);
-            case 0 -> setForm(dash);
-            default -> {
-            }             
-        }
     }
 
     /**

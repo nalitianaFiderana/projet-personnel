@@ -12,7 +12,6 @@ import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.ListCellRenderer;
-import javax.swing.SwingUtilities;
 import model.marchandise;
 import model.model_cli;
 
@@ -34,10 +33,10 @@ public class listMarchVente<E extends Object> extends JList<E>  {
         setModel(model);
         setLayoutOrientation(JList.HORIZONTAL_WRAP);
         setVisibleRowCount(1); // Une seule ligne visible
-                addMouseListener(new MouseAdapter() {
+        addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent me){
-
+                   
             }
             @Override
             public void mouseExited(MouseEvent me){
@@ -66,7 +65,7 @@ public class listMarchVente<E extends Object> extends JList<E>  {
         };
     }
     
-    public void addItem(model_cli data){
+    public void addItem(marchandise data){
         this.model.addElement(data);
     }
     

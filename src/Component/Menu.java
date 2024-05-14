@@ -94,7 +94,7 @@ public class Menu extends javax.swing.JPanel {
 
         TitleApp.setOpaque(false);
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ressource/img/162.png"))); // NOI18N
         jLabel1.setText("Gestion d'Entreprise");
