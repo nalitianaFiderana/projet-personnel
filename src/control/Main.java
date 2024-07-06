@@ -5,6 +5,8 @@
 package control;
 
 import Component.EventMenuSelected;
+import Component.csvWriter;
+import Component.sqliteDriver;
 import java.awt.Color;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
@@ -14,6 +16,7 @@ import page.GArticle;
 import page.GClient;
 import page.GFournisseur;
 import page.GInventaire;
+import page.InventaireDetail;
 import page.dashboard;
 import page.pointDeVente;
 import page.recherche;
@@ -36,12 +39,17 @@ public class Main extends javax.swing.JFrame {
     private GArticle Gart;
     private GFournisseur Gfou;
     private GInventaire Ginv;
+    private InventaireDetail invD;
     public static Main instance;
+    public static csvWriter csv;
+    public static sqliteDriver db;
     
     
     public Main() {
         initComponents();
         newBD bd = new newBD();
+        db = new sqliteDriver();
+        csv = new csvWriter();
         if(bd.readData("base").isEmpty()){ bd.create();}
         if(instance == null){
             instance = this;
@@ -102,8 +110,53 @@ public class Main extends javax.swing.JFrame {
         });
     }
     
-    private void init(){
+    public void init(){
         setForm(dash);
+    }
+    public String Money(String chiffre){
+        int j = 0;
+        String s = "";
+        for(int i = chiffre.length()-1;i>=0;i--){
+            if(j == 3){
+                s = chiffre.charAt(i) + " " + s;
+                j = 0;
+            }else{
+                s = chiffre.charAt(i) + s;
+            }
+            j++;
+        }
+            return s;
+    }
+    public void redirection(int i, String param){
+        String[] pm = param.split("_");
+        switch(i){
+            case 1:
+                pointV = new pointDeVente();
+                setForm(pointV);
+                break;
+            case 2:
+                setForm(Gcli);
+                break;
+            case 5:
+                setForm(AchMar);
+                break;
+            case 8:
+                setForm(Gart);
+                break;
+            case 9:
+                setForm(Ginv);
+                break;
+            case 10:
+                setForm(Gfou);
+                break;
+            case 11:
+                invD = new InventaireDetail(pm);
+                setForm(invD);
+                break;
+            default:
+                break;
+                
+        }
     }
     
     public void setForm(JComponent comp){
@@ -114,6 +167,7 @@ public class Main extends javax.swing.JFrame {
         System.out.print(comp);
         System.out.println();
     }
+    public GInventaire getGinv(){return this.Ginv;}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -198,11 +252,11 @@ public class Main extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(Main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-
+        
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Main().setVisible(true);
+                new ConnectFrame().setVisible(true);
             }
         });
     }

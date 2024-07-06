@@ -5,10 +5,15 @@
 package page;
 
 import Component.csvWriter;
+import control.Main;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.border.EmptyBorder;
+import model.model_inv;
 import swing.scrollbar;
 
 /**
@@ -24,8 +29,9 @@ public class inventaire extends javax.swing.JPanel {
     
     public inventaire() {
         initComponents();
+        numInventaire.setText("Inventaire - "+(Main.db.getNbrInv()+1));
         jScrollPane1.setBorder(new EmptyBorder(0,0,0,0));
-        tableInv1.Update();
+        tableInv1.Update(benefice, total);
         jScrollPane1.getVerticalScrollBar().setUI(new scrollbar(false));
         jLabel1.setText("nombre : "+id);
         add.addMouseListener(new MouseAdapter(){
@@ -52,14 +58,37 @@ public class inventaire extends javax.swing.JPanel {
             public void mouseClicked(MouseEvent me){
                 if(date1.check() && !tableInv1.getList().isEmpty()){
                     csvWriter csv = new csvWriter();
-                    csv.writeThis(tableInv1.getList(), date1.getDate(), 7, "inventaire");
+                    try {
+                        csv.writeThis(tableInv1.getList(), date1.getDate(), 7, numInventaire.getText());
+                    } catch (IOException ex) {
+                        Logger.getLogger(inventaire.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }else{
+                    makeMessage();
+                }
+            }
+        });
+        enregistrement.addMouseListener(new MouseAdapter(){
+            @Override
+            public void mouseClicked(MouseEvent me){
+                if(date1.check() && !tableInv1.getList().isEmpty() && !exec.getText().isEmpty()){
+                    id = 0;
+                    Main.db.insertInv(numInventaire.getText(), tableInv1.getTotal(), tableInv1.getBenef(), date1.getDate(), exec.getText());
+                    csvWriter csv = new csvWriter();
+                    try {
+                        csv.writeThis(tableInv1.getList(), date1.getDate(), 7, numInventaire.getText());
+                    } catch (IOException ex) {
+                        Logger.getLogger(inventaire.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    Main.instance.getGinv().addlast(new model_inv(numInventaire.getText(), tableInv1.getTotal(), tableInv1.getBenef(),exec.getText(),date1.getDate()));
+                    Main.instance.redirection(9,"");
                 }else{
                     makeMessage();
                 }
             }
         });
         
-        System.out.println(System.getProperty("juser.dir"));
+        System.out.println(System.getProperty("user.dir"));
     }
     
     private void makeMessage(){
@@ -83,8 +112,8 @@ public class inventaire extends javax.swing.JPanel {
         jLabel3 = new javax.swing.JLabel();
         remove = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
+        benefice = new javax.swing.JLabel();
+        total = new javax.swing.JLabel();
         ecriture = new swing.buttonV();
         enregistrement = new swing.buttonV();
         warn = new javax.swing.JLabel();
@@ -93,6 +122,7 @@ public class inventaire extends javax.swing.JPanel {
         panelBorder3 = new swing.PanelBorder();
         jLabel1 = new javax.swing.JLabel();
         date1 = new model.date();
+        exec = new javax.swing.JTextField();
 
         setBackground(new java.awt.Color(198, 208, 251));
 
@@ -126,13 +156,13 @@ public class inventaire extends javax.swing.JPanel {
         jLabel2.setFont(new java.awt.Font("Yu Gothic UI Light", 0, 15)); // NOI18N
         jLabel2.setText("La somme total des benefices : ");
 
-        jLabel4.setFont(new java.awt.Font("Sitka Small", 1, 18)); // NOI18N
-        jLabel4.setForeground(new java.awt.Color(102, 102, 0));
-        jLabel4.setText("01245");
+        benefice.setFont(new java.awt.Font("Sitka Small", 1, 18)); // NOI18N
+        benefice.setForeground(new java.awt.Color(102, 102, 0));
+        benefice.setText("01245");
 
-        jLabel5.setFont(new java.awt.Font("Sitka Small", 1, 18)); // NOI18N
-        jLabel5.setForeground(new java.awt.Color(102, 102, 0));
-        jLabel5.setText("0124");
+        total.setFont(new java.awt.Font("Sitka Small", 1, 18)); // NOI18N
+        total.setForeground(new java.awt.Color(102, 102, 0));
+        total.setText("0124");
 
         ecriture.setForeground(new java.awt.Color(255, 255, 255));
         ecriture.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -163,11 +193,11 @@ public class inventaire extends javax.swing.JPanel {
                             .addGroup(panelBorder1Layout.createSequentialGroup()
                                 .addComponent(jLabel2)
                                 .addGap(18, 18, 18)
-                                .addComponent(jLabel4))
+                                .addComponent(benefice))
                             .addGroup(panelBorder1Layout.createSequentialGroup()
                                 .addComponent(jLabel3)
                                 .addGap(18, 18, 18)
-                                .addComponent(jLabel5)))
+                                .addComponent(total)))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelBorder1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -197,11 +227,11 @@ public class inventaire extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(panelBorder1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(jLabel5))
+                    .addComponent(total))
                 .addGap(18, 18, 18)
                 .addGroup(panelBorder1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jLabel4))
+                    .addComponent(benefice))
                 .addGap(18, 18, 18)
                 .addGroup(panelBorder1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(enregistrement, javax.swing.GroupLayout.DEFAULT_SIZE, 42, Short.MAX_VALUE)
@@ -214,6 +244,7 @@ public class inventaire extends javax.swing.JPanel {
         numInventaire.setBackground(new java.awt.Color(255, 204, 0));
         numInventaire.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
         numInventaire.setForeground(new java.awt.Color(102, 102, 102));
+        numInventaire.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         numInventaire.setText("    numero d'inventaire");
 
         panelBorder3.setBackground(new java.awt.Color(102, 102, 102));
@@ -240,6 +271,11 @@ public class inventaire extends javax.swing.JPanel {
 
         date1.setBackground(new java.awt.Color(0, 51, 153));
 
+        exec.setBackground(new java.awt.Color(255, 255, 255));
+        exec.setFont(new java.awt.Font("Dialog", 0, 13)); // NOI18N
+        exec.setForeground(new java.awt.Color(102, 102, 102));
+        exec.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(102, 102, 102), 1, true), "Executeur", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Dialog", 0, 11), new java.awt.Color(102, 102, 102))); // NOI18N
+
         javax.swing.GroupLayout panelBorder2Layout = new javax.swing.GroupLayout(panelBorder2);
         panelBorder2.setLayout(panelBorder2Layout);
         panelBorder2Layout.setHorizontalGroup(
@@ -249,6 +285,8 @@ public class inventaire extends javax.swing.JPanel {
                 .addGap(125, 125, 125)
                 .addComponent(date1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(exec, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(panelBorder3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(3, 3, 3))
         );
@@ -259,7 +297,8 @@ public class inventaire extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(panelBorder2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(panelBorder3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(date1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(date1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(exec))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -288,14 +327,14 @@ public class inventaire extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel add;
+    private javax.swing.JLabel benefice;
     private model.date date1;
     private swing.buttonV ecriture;
     private swing.buttonV enregistrement;
+    private javax.swing.JTextField exec;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel numInventaire;
     private swing.PanelBorder panelBorder1;
@@ -303,6 +342,7 @@ public class inventaire extends javax.swing.JPanel {
     private swing.PanelBorder panelBorder3;
     private javax.swing.JLabel remove;
     private swing.tableInv tableInv1;
+    private javax.swing.JLabel total;
     private javax.swing.JLabel warn;
     // End of variables declaration//GEN-END:variables
 }

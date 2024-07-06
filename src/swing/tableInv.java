@@ -92,7 +92,28 @@ public class tableInv extends JTable{
         
     }
     
-    public void Update(){
+    public int getTotal(){
+        DefaultTableModel model = (DefaultTableModel) getModel();
+        int som = 0;
+        //if(model.getRowCount()<=0) return 0;
+        for(int i=0;i<model.getRowCount();i++){
+            som += (model.getValueAt(i, 7) == null) ? 0 : (int) model.getValueAt(i, 7);
+        }
+        return som;
+    }
+    public int getBenef(){
+        DefaultTableModel model = (DefaultTableModel) getModel();
+        int pu = 0;
+        //if(model.getRowCount()<=0) return 0;
+        for(int i=0;i<model.getRowCount();i++){
+            int pui = model.getValueAt(i, 3) == null ? 0 : Integer.parseInt((String) model.getValueAt(i, 3));
+            int nbr = model.getValueAt(i, 5) == null ? 0 : Integer.parseInt((String) model.getValueAt(i, 5));
+            pu += pui*nbr;
+        }
+        return getTotal() - pu;
+    }
+    
+    public void Update(javax.swing.JLabel benefice, javax.swing.JLabel total){
         DefaultTableModel model = (DefaultTableModel) getModel();
         model.addTableModelListener((TableModelEvent e) -> {
             if(e.getType() == TableModelEvent.UPDATE){
@@ -104,7 +125,7 @@ public class tableInv extends JTable{
                         int pv = (isInt((String) model.getValueAt(row, 4))) ? Integer.parseInt((String) model.getValueAt(row, 4)) : 0;
                         int nb = (isInt((String) model.getValueAt(row, 5))) ? Integer.parseInt((String) model.getValueAt(row, 5)) : 0;
                         
-                        model.setValueAt(pu*nb, row, 7);
+                        model.setValueAt(pv*nb, row, 7);
                         model.setValueAt((pv == 0 || pu == 0) ? 0 : ((pv-pu)*100)/pu,row, 6);
                     }else{
                         model.setValueAt("0", row, column);
@@ -113,6 +134,9 @@ public class tableInv extends JTable{
                 }
                 System.out.print("Changement lig : "+row+" col : "+column+"  "+model.getValueAt(row, column));
             }
+            benefice.setText(this.getBenef()+"");
+            total.setText(this.getTotal()+"");
+            
         });
     }
     

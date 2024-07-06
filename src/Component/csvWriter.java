@@ -6,12 +6,14 @@ package Component;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JOptionPane;
 import model.marchandise;
 import model.model_cli;
 
@@ -22,14 +24,26 @@ import model.model_cli;
 public class csvWriter {
     
     String currentDirectory = System.getProperty("user.dir");
+    
     public csvWriter(){}
     
-    public void writeThis(List<Object[]> lists,String date,int longueurTab,String nameFile){
-        
-        
+    public void deleteCSV(String filename){
+        String filePath = this.currentDirectory + "/" + filename + ".csv";
+        File file = new File(filePath);
+        if(file.exists() && file.isFile()){
+            if(file.delete()){
+                JOptionPane.showMessageDialog(null, "Le fichier csv relatif a été supprimer", "Succès", JOptionPane.INFORMATION_MESSAGE);
+            }else{
+                JOptionPane.showMessageDialog(null, "Erreur lors de la suppression", "Erreur", JOptionPane.ERROR_MESSAGE);
+            }
+        }else{
+            JOptionPane.showMessageDialog(null, "Il n'y a plus de fichier csv relatif", "Erreur 404", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    public void writeThis(List<Object[]> lists,String date,int longueurTab,String nameFile) throws IOException{
 
         // Concaténez le nom du fichier CSV
-
         try (PrintWriter writer = new PrintWriter(new FileWriter(getPath(nameFile)))) {
             // Écriture de l'en-tête
             writer.println(date);

@@ -6,9 +6,14 @@ package swing;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.PopupMenu;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import javax.swing.JLabel;
 import javax.swing.JTable;
+import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -44,7 +49,7 @@ public class tableNorm extends JTable{
         this.posAction = posAction;
     }
     
-    private int posAction = 0;
+    private int posAction = -1;
     
     private boolean eleg;
     
@@ -100,13 +105,30 @@ public class tableNorm extends JTable{
             public Component getTableCellRendererComponent(JTable j, Object o, boolean selected, boolean bln1, int i, int i1){
                 Component com = super.getTableCellRendererComponent(j, o, selected, bln1, i, i1);
                 com.setBackground(Color.WHITE);
+                com.addMouseListener(new MouseAdapter(){
+                    @Override
+                    public void mouseClicked(MouseEvent me){
+                        
+                    }
+                });
+                
                 setBorder(noFocusBorder);
                 if(i1 == 0){
                     setHorizontalAlignment(JLabel.CENTER);
                 }
+                //posAction = selected ? i : -1;
+                
                 com.setForeground((selected ? new Color(13,113,102) : new Color(102,102,102)));
                 return com;
             }
         });
+    }
+    public void removeR(int row){
+        DefaultTableModel model = (DefaultTableModel) getModel();
+        model.removeRow(row);
+    }
+    public void add(Object[] data){
+        DefaultTableModel model = (DefaultTableModel) getModel();
+        model.addRow(data);
     }
 }

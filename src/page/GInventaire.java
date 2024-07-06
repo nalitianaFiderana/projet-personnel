@@ -4,7 +4,18 @@
  */
 package page;
 
+import Component.csvWriter;
+import Component.sqliteDriver;
 import control.Main;
+import java.awt.Frame;
+import java.awt.GridLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.SwingUtilities;
+import model.model_inv;
+import swing.buttonV;
 
 /**
  *
@@ -17,6 +28,65 @@ public class GInventaire extends javax.swing.JPanel {
      */
     public GInventaire() {
         initComponents();
+        addData();
+        tableNorm2.addMouseListener(new MouseAdapter(){
+            @Override
+            public void mouseClicked(MouseEvent me){
+                int row = tableNorm2.rowAtPoint(me.getPoint());
+                System.out.println("colonne = " + 0 + " " + tableNorm2.getValueAt(row, 0));
+                System.out.println("colonne = " + 1 + " " + tableNorm2.getValueAt(row, 1));
+                System.out.println("colonne = " + 2 + " " + tableNorm2.getValueAt(row, 2));
+                System.out.println("colonne = " + 3 + " " + tableNorm2.getValueAt(row, 3));
+                if(SwingUtilities.isRightMouseButton(me)) showPopup(me.getXOnScreen(),me.getYOnScreen(),tableNorm2.getValueAt(row, 1),tableNorm2.getValueAt(row, 0), row);
+                else showInventaire(tableNorm2.getValueAt(row, 1).toString()+"_"+tableNorm2.getValueAt(row, 4).toString()+"_"+tableNorm2.getValueAt(row, 0).toString()+"_"+tableNorm2.getValueAt(row, 3).toString());
+            }
+        });
+       
+    }
+    public void addlast(model_inv obj){
+        Object[] o = {obj.date,obj.libelle,obj.total,obj.benefice,obj.executeur};
+        tableNorm2.add(o);
+    }
+    public void addData(){
+        for(model_inv inv : Main.db.getInventaire("")){
+            Object[] o = {inv.date,inv.libelle,inv.total,inv.benefice,inv.executeur};
+            tableNorm2.add(o);
+        }
+    }
+    private void showPopup( int x, int y, Object lib, Object date, int row) {
+        // Créer un JDialog comme popup
+        JDialog popup = new JDialog((Frame) null, lib.toString(), true);
+        popup.setLayout(new GridLayout(0, 1));
+        popup.add(new JLabel("Date : " + date.toString()));
+        buttonV btndel = new buttonV("Supprimer");
+        popup.add(btndel);
+        
+        
+        btndel.addMouseListener(new MouseAdapter(){
+            @Override
+            public void mouseClicked(MouseEvent e){
+                Main.db.supprLib(lib.toString());
+                popup.dispose();
+                tableNorm2.removeR(row);
+                csvWriter csv = new csvWriter();
+                csv.deleteCSV(lib.toString());
+            }
+        });
+        
+        // Définir la taille de la popup
+        
+        popup.pack();
+        popup.setSize(150, 100);
+
+        // Définir la position de la popup
+        popup.setLocation(x, y);
+
+        // Afficher la popup
+        popup.setVisible(true);
+    }
+    
+    private void showInventaire(String param){
+        Main.instance.redirection(11, param);
     }
 
     /**
@@ -28,24 +98,9 @@ public class GInventaire extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tableNorm1 = new swing.tableNorm(true);
         jButton1 = new javax.swing.JButton();
-
-        jScrollPane1.setBorder(null);
-
-        tableNorm1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Date", "libelle", "Cout total", "Benefice"
-            }
-        ));
-        jScrollPane1.setViewportView(tableNorm1);
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tableNorm2 = new swing.tableNorm(true);
 
         jButton1.setBackground(new java.awt.Color(0, 153, 102));
         jButton1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -58,33 +113,53 @@ public class GInventaire extends javax.swing.JPanel {
             }
         });
 
+        jScrollPane2.setBorder(null);
+
+        tableNorm2.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Date", "Libellé", "Montant total", "Bénéfice", "executeur"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                true, true, false, false, true
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane2.setViewportView(tableNorm2);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 889, Short.MAX_VALUE)
-                .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton1)
-                .addGap(88, 88, 88))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton1)
+                        .addGap(88, 88, 88))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 889, Short.MAX_VALUE)
+                        .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 214, Short.MAX_VALUE)
+                .addGap(8, 8, 8)
                 .addComponent(jButton1)
-                .addContainerGap(221, Short.MAX_VALUE))
+                .addGap(20, 20, 20))
         );
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-        
         inventaire inv = new inventaire();
         Main.instance.setForm(inv);
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -92,7 +167,7 @@ public class GInventaire extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
-    private javax.swing.JScrollPane jScrollPane1;
-    private swing.tableNorm tableNorm1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private swing.tableNorm tableNorm2;
     // End of variables declaration//GEN-END:variables
 }

@@ -38,6 +38,12 @@ public class buttonV extends JLabel{
         setText("Voir+");
         setFont(new Font("sansserif",1,15));
     }
+    public buttonV(String str){
+        setText(str);
+        setFont(new Font("sansserif",1,15));
+        this.setHorizontalAlignment(CENTER);
+        this.setForeground(Color.WHITE);
+    }
     
     @Override
     public void paintComponent(Graphics gr){

@@ -21,7 +21,6 @@ public class renduMarchandise extends javax.swing.JPanel {
         nom.setText(" => "+data.getNom());
         prix.setText(data.getPrixVente() + " Ar");
         stock.setText("En Stock : " + data.getNombre());
-        System.out.println(Math.random());
         
     }
     public renduMarchandise(){
